@@ -1,34 +1,59 @@
-# Mantine Vite template
+# Geriatric Care Assessment Form
 
-## Features
+A single-page Geriatric Care Assessment Form built with React 19, TypeScript, Mantine v7, `@mantine/form`, and Zod.
 
-This template comes with the following features:
+## How to Run
 
-- [PostCSS](https://postcss.org/) with [mantine-postcss-preset](https://mantine.dev/styles/postcss-preset)
-- [TypeScript](https://www.typescriptlang.org/)
-- [Storybook](https://storybook.js.org/)
-- [Vitest](https://vitest.dev/) setup with [React Testing Library](https://testing-library.com/docs/react-testing-library/intro)
-- Oxlint setup for TypeScript and React sources
+1. Install dependencies:
+   ```bash
+   yarn install
+   ```
 
-## npm scripts
+2. Start the development server:
+   ```bash
+   yarn dev
+   ```
 
-## Build and dev scripts
+## How to Test
 
-- `dev` – start development server
-- `build` – build production version of the app
-- `preview` – locally preview production build
+Run the full verification suite (TypeScript typechecking, Oxlint, Stylelint, Oxfmt formatting, and Vitest test suite):
 
-### Testing scripts
+```bash
+yarn test
+```
 
-- `typecheck` – checks TypeScript types
-- `lint` – runs oxlint and stylelint
-- `format:test` – checks files with oxfmt
-- `vitest` – runs vitest tests
-- `vitest:watch` – starts vitest watch
-- `test` – runs `vitest`, `format:test`, `lint` and `typecheck` scripts
+Or run Vitest tests directly:
 
-### Other scripts
+```bash
+yarn vitest
+```
 
-- `storybook` – starts storybook dev server
-- `storybook:build` – build production storybook bundle to `storybook-static`
-- `format:write` – formats all files with oxfmt
+## Implementation Highlights & Schema Validation
+
+- **Zod Schema (`src/features/assessment/schema.ts`)**:
+  - `mrn`: Matches pattern `^MRN-\d{6}$`.
+  - `patientName`: 2–60 characters.
+  - `dateOfBirth` & `assessmentDate`: Validated with ISO date strings. Ensures patient is aged 60 or older relative to the assessment date.
+  - `mobility`: Enum generated from `MOBILITY` array.
+  - `barthelIndex`: Whole number between 0 and 100 in steps of 5.
+  - `medicationCount`: 0 to 30.
+  - `pharmacistReviewRequested`: Required if regular medication count is 5 or more (polypharmacy rule).
+  - `followUpDate`: Must be strictly after the assessment date.
+  - `consentObtained`: Must be `true`.
+- **Single Source of Truth**: All validation rules reside exclusively in the Zod schema and are wired via `@mantine/form`'s `schemaResolver(assessmentSchema, { sync: true })`. No validation logic is duplicated in component code.
+- **Submit Behavior**: Simulates an ~800ms save state, disables submit button with loading indicator, and displays parsed Zod values in a Mantine `<Code>` block upon success.
+- **Sample Patient Fixture**: Features a "Load sample patient" button populating valid test data.
+
+## Unit & Integration Testing
+
+1. **Schema Boundary Test**: Tests exact 60-year age boundary on assessment date (`safeParse`) for exact 60 vs 1 day short.
+2. **Form Submission Test**: Renders form with MantineProvider, clicks "Load sample patient", submits form, and asserts `onSave` handler is called with parsed Zod values.
+
+## Anything Unfinished
+
+Everything specified in the assignment prompt is **100% complete** and all verification checks (`yarn test`) are passing cleanly.
+
+## Time Spent
+
+Approximately 1.5 hours spent on setup, schema implementation, form component building, test coverage, and documentation.
+# Geriatric-Care
