@@ -21,10 +21,14 @@
   },
   "dependencies": {
     "@mantine/core": "9.5.2",
+    "@mantine/dates": "^9.5.2",
+    "@mantine/form": "^9.5.2",
     "@mantine/hooks": "9.5.2",
+    "dayjs": "^1.11.23",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
-    "react-router-dom": "^7.9.4"
+    "react-router-dom": "^7.9.4",
+    "zod": "^4.5.2"
   },
   "devDependencies": {
     "@storybook/addon-themes": "^10.0.0",
@@ -39,7 +43,7 @@
     "@types/react-dom": "^19.2.1",
     "@vitejs/plugin-react": "^6.0.0",
     "identity-obj-proxy": "^3.0.0",
-    "jsdom": "^30.0.0",
+    "jsdom": "24.1.1",
     "oxc-config-mantine": "^1.0.0",
     "oxfmt": "^0.65.0",
     "oxlint": "^1.70.0",
